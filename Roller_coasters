@@ -1,0 +1,264 @@
+# load rankings data
+wood_roller = pd.read_csv('Golden_Ticket_Award_Winners_Wood.csv')
+steel_roller = pd.read_csv('Golden_Ticket_Award_Winners_Steel.csv')
+web_coaster = pd.read_csv('roller_coasters.csv')
+
+# 3
+# Create a function to plot rankings over time for 1 roller coaster
+
+def roller_position(material, name):
+  material = material.lower()
+  if (material == 'wood') and (name in wood_roller.Name.values):
+    name_list = []
+    for element in wood_roller.Name.values:
+      name_list.append(element)
+#obtain all indexes associated
+    indices = [i for i, x in enumerate(name_list) if x == name]
+    x_year = []
+    y_rank = []
+#reject any duplicated year
+    for ind_num in indices:
+      if wood_roller['Year of Rank'][ind_num] not in x_year:
+        x_year.append(wood_roller['Year of Rank'][ind_num])
+        y_rank.append(wood_roller.Rank[ind_num])
+    ax = plt.subplot()
+    plt.plot(range(len(x_year)), y_rank)
+    plt.title('Ranking Evolution of ' + name)
+    plt.xlabel('Years')
+    plt.ylabel('Ranking')
+    ax.set_xticks(range(len(x_year)))
+    ax.set_xticklabels(x_year)
+#invert Y-Axis (better appra«oach to real world)
+    plt.gca().invert_yaxis()   
+    plt.show()
+       
+  elif (material == 'steel') and (name in steel_roller.Name.values):
+    name_list = []
+    for element in steel_roller.Name.values:
+      name_list.append(element)
+    indices = [i for i, x in enumerate(name_list) if x == name]
+    x_year = []
+    y_rank = []
+    for ind_num in indices:
+      if steel_roller['Year of Rank'][ind_num] not in x_year:
+        x_year.append(steel_roller['Year of Rank'][ind_num])
+        y_rank.append(steel_roller.Rank[ind_num])
+    ax = plt.subplot()
+    plt.plot(range(len(x_year)), y_rank)
+    plt.title('Ranking Evolution of ' + name)
+    plt.xlabel('Years')
+    plt.ylabel('Ranking')
+    ax.set_xticks(range(len(x_year)))
+    ax.set_xticklabels(x_year)
+    plt.gca().invert_yaxis()   
+    plt.show()
+
+  else:
+    print('Problem with graph1. Please check the material and/or name provided.')
+
+#roller_position('Steel', 'NItro')
+
+-------------------------------------------------------------------------------------------------------------
+
+# 4
+# Create a function to plot two rankings over time simultaneously
+
+def comparing_two_roller(material, name1, name2):
+  material = material.lower()
+  if (material == 'wood') and (name1 in wood_roller.Name.values) and (name2 in wood_roller.Name.values):
+    name_list = []
+    for element in wood_roller.Name.values:
+      name_list.append(element)
+#obtain all indexes associated
+    indices_name1 = [i for i, x in enumerate(name_list) if x == name1]
+    indices_name2 = [i for i, x in enumerate(name_list) if x == name2]
+#separate year and respective ranking of each name    
+    x_year_name1 = []
+    x_year_name2 = []
+    y_rank_name1 = []
+    y_rank_name2 = []
+    for ind_num1 in indices_name1:
+      if wood_roller['Year of Rank'][ind_num1] not in x_year_name1:
+        x_year_name1.append(wood_roller['Year of Rank'][ind_num1])
+        y_rank_name1.append(wood_roller.Rank[ind_num1])
+    for ind_num2 in indices_name2:
+      if wood_roller['Year of Rank'][ind_num2] not in x_year_name2:
+        x_year_name2.append(wood_roller['Year of Rank'][ind_num2])
+        y_rank_name2.append(wood_roller.Rank[ind_num2])
+#create plot with 2 lines
+    ax = plt.subplot()
+    plt.plot(range(len(x_year_name1)), y_rank_name1)
+    plt.plot(range(len(x_year_name2)), y_rank_name2)
+    plt.title(material + ' ranking: ' + name1 + ' vs ' + name2)
+    plt.legend([name1, name2])
+    plt.xlabel('Year')
+    plt.ylabel('Ranking')
+    ax.set_xticks(range(len(x_year_name1)))
+    ax.set_xticklabels(x_year_name1)
+    plt.gca().invert_yaxis()
+    plt.show()
+
+  elif (material == 'steel') and (name1 in steel_roller.Name.values) and (name2 in steel_roller.Name.values):
+    name_list = []
+    for element in steel_roller.Name.values:
+      name_list.append(element)
+#obtain all indexes associated
+    indice_name1 = [i for i, x in enumerate(name_list) if x == name1]
+    indice_name2 = [i for i, x in enumerate(name_list) if x == name2]
+#separate year and respective ranking of each name
+    x_year_name1 = []
+    x_year_name2 = []
+    y_rank_name1 = []
+    y_rank_name2 = []
+    for ind_name1 in indice_name1:
+      if steel_roller['Year of Rank'][ind_name1] not in x_year_name1:
+        x_year_name1.append(steel_roller['Year of Rank'][ind_name1])
+        y_rank_name1.append(steel_roller.Rank[ind_name1])
+    for ind_name2 in indice_name2:
+      if steel_roller['Year of Rank'][ind_name2] not in x_year_name2:
+        x_year_name2.append(steel_roller['Year of Rank'][ind_name2])
+        y_rank_name2.append(steel_roller.Rank[ind_name2])
+#create plot with 2 lines
+    ax = plt.subplot()
+    plt.plot(range(len(x_year_name1)), y_rank_name1)
+    plt.plot(range(len(x_year_name2)), y_rank_name2)
+    plt.title(material + ' ranking: ' + name1 + ' vs ' + name2)
+    plt.legend([name1, name2])
+    plt.xlabel('Year')
+    plt.ylabel('Ranking')
+    ax.set_xticks(range(len(x_year_name1)))
+    ax.set_xticklabels(x_year_name1)
+    plt.gca().invert_yaxis()
+    plt.show()
+  else:
+    print('Problem graph2. Please check if material and/or names provided are correct.')
+
+comparing_two_roller('Steel', 'Millennium Force', 'Apollo\'s Chariot')
+
+------------------------------------------------------------------------------------------------
+
+# 5
+# Create a function to plot top n rankings over time
+
+def top_rollers(n, material):
+  material = material.lower()
+  if material == 'wood':
+    top_n_rankings = wood_roller[wood_roller.Rank <= 5]
+    for roller in set(top_n_rankings.Name):
+      roller_ranking = top_n_rankings[top_n_rankings.Name == roller]
+      ax = plt.subplot()
+      ax.plot(roller_ranking['Year of Rank'], roller_ranking.Rank)
+      
+    plt.xlabel('Years')
+    plt.ylabel('Ranking')
+    plt.title('Top ' + str(n) + ' evolution: wood')
+    plt.gca().invert_yaxis()
+    plt.show()
+    
+  elif material == 'steel':
+    top_n_ranking = steel_roller[steel_roller.Rank <= 5]
+    for roller in set(top_n_ranking.Name):
+      roller_ranking = top_n_ranking[top_n_ranking.Name == roller]
+      ax = plt.subplot()
+      ax.plot(roller_ranking['Year of Rank'], roller_ranking.Rank)
+
+    plt.xlabel('Years')
+    plt.ylabel('Ranking')
+    plt.title('Top ' + str(n) + ' evolution: Steel')
+    plt.gca().invert_yaxis()
+    plt.show()
+  
+  else:
+    print('Problem grap3. Please check the material and/or number provided')
+
+top_rollers(5, 'wood')
+
+------------------------------------------------------------
+
+# 7
+# Create a function to plot histogram of column values
+
+def histogram_roller (df, column):
+    data_to_get = df[column]
+    if data_to_get.dtypes == 'float64':
+      plt.hist(data_to_get.dropna())
+      plt.title('Distribution of ' + column)
+      plt.ylabel('Total Roller Coasters')
+      plt.xlabel(column)
+      plt.show()  
+    
+    else:
+      print('Problem graph4. Please verify the column and/or DataFrame provided (only supported numerical data)')
+
+histogram_roller(web_coaster, 'num_inversions')
+
+-----------
+
+# 8
+# Create a function to plot inversions by coaster at park
+
+def inversion_bar(df, park_name):
+  if park_name in df.park.values:
+    all_parks = df[df.park == park_name]
+    all_parks = all_parks.sort_values('num_inversions', ascending = False)
+    roller_name = all_parks['name']
+    roller_inv = all_parks['num_inversions']
+    ax = plt.subplot()
+    plt.bar(range(len(roller_name)), roller_inv)
+    ax.set_xticks(range(len(roller_name)))
+    ax.set_xticklabels(roller_name, rotation = 45)
+    plt.title('Total Inversions Distribution at ' + park_name + ' park')
+    plt.ylabel('Frequency')
+    plt.xlabel('Roller Coasters')
+    plt.show()
+    
+  else:
+    print('Problem graph5. Please confirm the DataFrame and/or park provided.')
+
+#inversion_bar(web_coaster, 'Terra Mítica')
+
+------------------------------------------------------------------------
+
+# 9
+# Create a function to plot a pie chart of status.operating
+
+def pie_operating_status(df):
+  total_open = df.status[df.status == 'status.operating']
+  count_open = total_open.count()
+  total_closed = df.status[df.status == 'status.closed.definitely']
+  count_closed = total_closed.count()
+  dict1 = {}
+  dict1['status.operating'] = count_open
+  dict1['status.closed.definitely'] = count_closed
+  key_dict = list(dict1.keys())
+  values_dict = list(dict1.values())
+
+  plt.pie(values_dict, labels = key_dict, autopct = '%d%%', explode = [0.1, 0])
+  plt.axis('equal')
+  plt.title('Distribution between Operating and Closed Definitely')
+  plt.show()
+  
+#pie_operating_status(web_coaster)
+
+-------------------------------------------------------------------------------------
+
+# 10
+# Create a function to plot scatter of any two columns
+
+def scatter_two_columns(df, column1, column2):
+# clean inputs provided
+  data_gather1 = df[column1]
+  data_gather2 = df[column2]
+ # Checkpoint to see if inputs provided are good 
+  if data_gather1.dtypes == 'float64' and data_gather2.dtypes == 'float64':
+    
+    plt.scatter(data_gather1, data_gather2)
+    plt.title('Scatter plot: ' + column1 + ' vs ' + column2)
+    plt.xlabel(column1)
+    plt.ylabel(column2)
+    plt.show()
+  
+  else:
+    print('Problem graph6. Please check the columns provided (only numericals are allowed)')
+
+#scatter_two_columns (web_coaster, 'speed', 'height')
